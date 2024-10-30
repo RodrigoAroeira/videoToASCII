@@ -1,46 +1,23 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <opencv2/videoio.hpp>
 #include <string>
 #include <sys/ioctl.h>
 
-#include "opencv2/videoio.hpp"
 #include "resolution.hpp"
-
-std::string pixelToChar(int pixelBrightness) {
-
-  // most intense to least inetense
-  const std::string chars = "@%#*+=-_. ";
-
-  int idx = pixelBrightness / 255.0F * (chars.length() - 1);
-
-  return std::string(1, chars[idx]);
-}
-
-Resolution getTerminalRes() {
-  struct winsize w;
-  ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-  return {w.ws_col, w.ws_row};
-}
-
-Resolution getVideoRes(const cv::VideoCapture &cap) {
-
-  int width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
-  int height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
-
-  return {width, height};
-}
+#include "utils.hpp"
 
 int main(int argc, char *argv[]) {
 
-  // path only for now
+  // path-only for now
   std::string src = "./video.mp4";
 
   cv::VideoCapture Capture(src);
 
   Resolution video = getVideoRes(Capture);
-  Resolution terminal = getTerminalRes();
+  Resolution terminalRes = getTerminalRes();
 
-  Resolution scaled = video.scale(terminal / 2);
+  Resolution scaled = video.scale(terminalRes / 2);
 
   if (!Capture.isOpened()) {
     std::cerr << "Error while opening video";
@@ -53,10 +30,10 @@ int main(int argc, char *argv[]) {
 
   while (true) {
 
-    Resolution newTerminal = getTerminalRes();
-    if (terminal != newTerminal) {
-      terminal = newTerminal;
-      scaled = video.scale(terminal / 2);
+    Resolution newTerminalRes = getTerminalRes();
+    if (terminalRes != newTerminalRes) {
+      terminalRes = newTerminalRes;
+      scaled = video.scale(terminalRes / 2);
     }
 
     Capture >> frame;
