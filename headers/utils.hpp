@@ -4,7 +4,7 @@
 #include <opencv2/videoio.hpp>
 #include <string>
 
-std::string pixelToChar(int pixelBrightness);
+char pixelToChar(int pixelBrightness);
 
 Resolution getTerminalRes();
 
@@ -18,6 +18,6 @@ void tempRename(const std::string &filename, const std::string &dest);
 
 void downloadVideo(const std::string &ytURL, const std::string &outputName);
 
-std::string pixelToColoredChar(cv::Vec3b &pixel);
+void pixelToColoredChar(const cv::Vec3b &pixel, char *str_out);
 
 std::string getStreamURL(const std::string &ytURL);

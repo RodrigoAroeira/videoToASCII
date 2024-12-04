@@ -1,19 +1,23 @@
 #include "utils.hpp"
-
-#include <filesystem>
-#include <regex>
-#include <string>
-
 #include "resolution.hpp"
 
-std::string pixelToChar(int pixelBrightness) {
+#include <cstdio>
+#include <filesystem>
+#include <opencv2/opencv.hpp>
+#include <regex>
+#include <string>
+#include <sys/ioctl.h>
+#include <unistd.h>
+
+char pixelToChar(int pixelBrightness) {
 
   // most intense to least intense
-  const std::string chars = "@%#*+=-:. ";
+  static const char *chars = "@%#*+=-:. ";
+  static const int n = strlen(chars);
 
-  int idx = pixelBrightness / 255.0F * (chars.length() - 1);
+  int idx = pixelBrightness / 255.0F * (n - 1);
 
-  return std::string(1, chars[idx]);
+  return chars[idx];
 }
 
 Resolution getTerminalRes() {
@@ -64,10 +68,11 @@ void downloadVideo(const std::string &ytURL, const std::string &outputName) {
   system(downloadCommand.c_str());
 }
 
-std::string pixelToColoredChar(cv::Vec3b &pixel) {
+void pixelToColoredChar(const cv::Vec3b &pixel, char str_out[25]) {
   int r = pixel[2];
   int g = pixel[1];
   int b = pixel[0];
-  return "\033[38;2;" + std::to_string(r) + ";" + std::to_string(g) + ";" +
-         std::to_string(b) + "m" + pixelToChar((r + g + b) / 3) + "\033[0m";
+  // this follows the escape code \033[38;2;<r>;<g>;<b>m for 24-bit color
+  char c = pixelToChar((r + g + b) / 3);
+  sprintf(str_out, "\033[38;2;%d;%d;%dm%c\033[0m", r, g, b, c);
 }
