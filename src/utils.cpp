@@ -34,7 +34,9 @@ Resolution getTerminalRes() {
 }
 
 bool isValidUrl(const std::string &url) noexcept {
-  return url.rfind("http://", 0) == 0 || url.rfind("https://", 0) == 0;
+  std::string command = "yt-dlp --simulate -q \"" + url + "\" > /dev/null 2>&1";
+  int result = system(command.c_str());
+  return result == 0;
 }
 
 std::string getStreamURL(const std::string &ytURL) {
