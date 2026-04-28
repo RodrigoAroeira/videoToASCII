@@ -12,16 +12,11 @@ file(GLOB SRC_FILES "${SRC_DIR}/*.cpp")
 
 add_executable(${PROJECT_NAME} ${SRC_FILES})
 
-target_include_directories(${PROJECT_NAME} PRIVATE headers includes/usr/include)
+target_include_directories(${PROJECT_NAME} PRIVATE headers)
 
-find_package(PkgConfig REQUIRED)
+find_package(OpenCV REQUIRED COMPONENTS core videoio imgproc)
 
-pkg_check_modules(DEPENDENCIES REQUIRED opencv4)
-
-# set(DEPENDENCIES_LIBRARIES ${DEPENDENCIES_LIBRARIES} -static)
-
-target_include_directories(${PROJECT_NAME} PRIVATE ${DEPENDENCIES_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${DEPENDENCIES_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 
 add_custom_target(
   run
