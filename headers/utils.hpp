@@ -16,7 +16,7 @@ bool fileExists(const std::string &filename);
 
 void tempRename(const std::string &filename, const std::string &dest);
 
-void downloadVideo(const std::string &ytURL, const std::string &outputName);
+bool downloadVideo(const std::string &ytURL, const std::string &outputName);
 
 void pixelToColoredChar(const cv::Vec3b &pixel, char *str_out);
 

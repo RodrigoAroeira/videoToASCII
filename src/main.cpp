@@ -15,7 +15,12 @@ int main(int argc, char *argv[]) {
   std::string videoName = "./video.mp4";
 
   if (isValidYTUrl(input)) {
-    downloadVideo(input, videoName);
+    videoName = "./yt_video.mp4";
+    std::cout << "Downloading YouTube video..." << std::endl;
+    if (!downloadVideo(input, videoName)) {
+      std::cerr << "Error: Failed to download YouTube video." << std::endl;
+      return -1;
+    }
   } else {
     videoName = input;
   }

@@ -43,14 +43,19 @@ bool isValidYTUrl(const std::string &url) noexcept {
 
 std::string getStreamURL(const std::string &ytURL) {
   std::stringstream result;
-  const std::string command = "yt-dlp -g -f best " + ytURL;
+  const std::string command = "yt-dlp -g -f \"bestvideo[ext=mp4]/best[ext=mp4]/best\" " + ytURL;
   FILE *pipe = popen(command.c_str(), "r");
-  char buff[128];
-  while (fgets(buff, sizeof(buff), pipe))
+  if (!pipe) return "";
+  char buff[1024];
+  int lines = 0;
+  while (fgets(buff, sizeof(buff), pipe) && lines < 1) {
     result << buff;
-
+    lines++;
+  }
   pclose(pipe);
-  return result.str();
+  std::string url = result.str();
+  if (!url.empty() && url.back() == '\n') url.pop_back();
+  return url;
 }
 
 bool fileExists(const std::string &filename) {
@@ -61,11 +66,11 @@ void tempRename(const std::string &filename, const std::string &dest) {
   std::filesystem::rename(filename, dest);
 }
 
-void downloadVideo(const std::string &ytURL, const std::string &outputName) {
-
+bool downloadVideo(const std::string &ytURL, const std::string &outputName) {
   const auto downloadCommand =
-      "yt-dlp " + ytURL + " -o " + outputName + " --force-overwrites";
-  system(downloadCommand.c_str());
+      "yt-dlp -f \"bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720][ext=mp4]/best\" --merge-output-format mp4 -o " + outputName + " " + ytURL;
+  int result = system(downloadCommand.c_str());
+  return result == 0 && fileExists(outputName);
 }
 
 void pixelToColoredChar(const cv::Vec3b &pixel, char str_out[25]) {
