@@ -4,7 +4,6 @@
 #include <cstdio>
 #include <filesystem>
 #include <opencv2/opencv.hpp>
-#include <regex>
 #include <string>
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -34,11 +33,8 @@ Resolution getTerminalRes() {
   return {width, height};
 }
 
-bool isValidYTUrl(const std::string &url) noexcept {
-  const std::regex pattern(
-      R"((https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([\w\-]{11})(\S*)?)",
-      std::regex::icase);
-  return std::regex_match(url, pattern);
+bool isValidUrl(const std::string &url) noexcept {
+  return url.rfind("http://", 0) == 0 || url.rfind("https://", 0) == 0;
 }
 
 std::string getStreamURL(const std::string &ytURL) {

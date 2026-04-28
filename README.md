@@ -6,14 +6,14 @@ ENDED: 2024-10-01 11:18
 
 ## About
 
-Convert video files and YouTube links to colored ASCII art, played directly in your terminal in real-time.
+Convert video files and URLs to colored ASCII art, played directly in your terminal in real-time.
 
 ## Features
 
 - Real-time ASCII video playback in terminal
 - 24-bit true color output
 - Automatic terminal resize detection during playback
-- YouTube video support via yt-dlp
+- Video URL support via yt-dlp (YouTube, Twitch, Vimeo, and hundreds more)
 - ASCII character density maps to pixel brightness
 
 ## Build Requirements
@@ -36,7 +36,7 @@ sudo apt install libopencv-dev yt-dlp
 sudo pacman -S opencv yt-dlp
 ```
 
-Note: `yt-dlp` is only required for YouTube video support.
+Note: `yt-dlp` is only required for video URL support.
 
 ## Build
 
@@ -51,13 +51,13 @@ make
 
 ## Usage
 
-Run the compiled binary with a video path or YouTube URL:
+Run the compiled binary with a local video path or any video URL supported by yt-dlp:
 
 ```bash
 # From project root (after building)
 ./build/videoToASCII video.mp4
 
-# Play YouTube video
+# Play video from URL (YouTube, Twitch, Vimeo, etc.)
 ./build/videoToASCII "https://www.youtube.com/watch?v=VIDEO_ID"
 
 # Use default video (./video.mp4) if no arguments provided

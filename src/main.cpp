@@ -14,11 +14,11 @@ int main(int argc, char *argv[]) {
   const std::string input = argc > 1 ? argv[1] : "./video.mp4";
   std::string videoName = "./video.mp4";
 
-  if (isValidYTUrl(input)) {
-    videoName = "./yt_video.mp4";
-    std::cout << "Downloading YouTube video..." << std::endl;
+  if (isValidUrl(input)) {
+    videoName = "./downloaded_video.mp4";
+    std::cout << "Downloading video..." << std::endl;
     if (!downloadVideo(input, videoName)) {
-      std::cerr << "Error: Failed to download YouTube video." << std::endl;
+      std::cerr << "Error: Failed to download video." << std::endl;
       return -1;
     }
   } else {

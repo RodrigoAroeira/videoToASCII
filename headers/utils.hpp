@@ -10,7 +10,7 @@ Resolution getTerminalRes();
 
 Resolution getVideoRes(const cv::VideoCapture &cap);
 
-bool isValidYTUrl(const std::string &txt) noexcept;
+bool isValidUrl(const std::string &txt) noexcept;
 
 bool fileExists(const std::string &filename);
 
